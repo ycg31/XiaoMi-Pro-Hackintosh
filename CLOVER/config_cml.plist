@@ -60,7 +60,7 @@
 	<key>Boot</key>
 	<dict>
 		<key>Arguments</key>
-		<string>darkwake=0</string>
+		<string>darkwake=0 ps2kbdonly=1</string>
 		<key>DefaultVolume</key>
 		<string>LastBootedVolume</string>
 		<key>HibernationFixup</key>
@@ -89,7 +89,7 @@
 			<dict>
 				<key>AAPL,ig-platform-id</key>
 				<data>CQCbPg==</data>
-				<key>AAPL00,override-no-connect</key>
+				<key>#AAPL00,override-no-connect</key>
 				<data>AP///////wBNEMMUAAAAAAkdAQSQIhN45t5Qo1RMmSYPUFQAAAABAQEBAQEBAQEBAQEBAQEBGjaAoHA4HkAwIDUAWMIQAAAYVCuAoHA4H0AwIDUAWMIQAAAYAAAAEAAAAAAAAAAAAAAAAAAAAAAA/ABMUTE1Nk0xSlcwMQogANg=</data>
 				<key>device-id</key>
 				<data>mz4AAA==</data>
@@ -169,30 +169,15 @@
 				<key>model</key>
 				<string>Intel Comet Lake PCH-LP LPSS: I2C Controller #4</string>
 			</dict>
-			<key>PciRoot(0x0)/Pci(0x1c,0x0)</key>
-			<dict>
-				<key>reg-ltrovr</key>
-				<data>AAQAAAAAAAA=</data>
-			</dict>
 			<key>PciRoot(0x0)/Pci(0x1c,0x0)/Pci(0x0,0x0)</key>
 			<dict>
 				<key>model</key>
 				<string>Intel Comet Lake PCH-LP PCIe Port #5</string>
 			</dict>
-			<key>PciRoot(0x0)/Pci(0x1d,0x0)</key>
-			<dict>
-				<key>reg-ltrovr</key>
-				<data>AAQAAAAAAAA=</data>
-			</dict>
 			<key>PciRoot(0x0)/Pci(0x1d,0x0)/Pci(0x0,0x0)</key>
 			<dict>
 				<key>model</key>
 				<string>Intel Comet Lake PCH-LP PCIe Port #9</string>
-			</dict>
-			<key>PciRoot(0x0)/Pci(0x1d,0x4)</key>
-			<dict>
-				<key>reg-ltrovr</key>
-				<data>AAQAAAAAAAA=</data>
 			</dict>
 			<key>PciRoot(0x0)/Pci(0x1d,0x4)/Pci(0x0,0x0)</key>
 			<dict>
@@ -313,6 +298,79 @@
 		<key>KernelToPatch</key>
 		<array/>
 	</dict>
+	<key>Quirks</key>
+	<dict>
+		<key>AppleXcpmExtraMsrs</key>
+		<false/>
+		<key>AppleXcpmForceBoost</key>
+		<false/>
+		<key>AvoidRuntimeDefrag</key>
+		<true/>
+		<key>DevirtualiseMmio</key>
+		<false/>
+		<key>DisableIoMapper</key>
+		<true/>
+		<key>DisableLinkeditJettison</key>
+		<true/>
+		<key>DisableSingleUser</key>
+		<false/>
+		<key>DisableVariableWrite</key>
+		<false/>
+		<key>DiscardHibernateMap</key>
+		<false/>
+		<key>DummyPowerManagement</key>
+		<false/>
+		<key>EnableSafeModeSlide</key>
+		<false/>
+		<key>EnableWriteUnprotector</key>
+		<false/>
+		<key>ExtendBTFeatureFlags</key>
+		<false/>
+		<key>ExternalDiskIcons</key>
+		<false/>
+		<key>ForceExitBootServices</key>
+		<false/>
+		<key>ForceOcWriteFlash</key>
+		<false/>
+		<key>FuzzyMatch</key>
+		<false/>
+		<key>IncreasePciBarSize</key>
+		<false/>
+		<key>KernelCache</key>
+		<string>Auto</string>
+		<key>MmioWhitelist</key>
+		<array/>
+		<key>PowerTimeoutKernelPanic</key>
+		<true/>
+		<key>ProtectMemoryRegions</key>
+		<false/>
+		<key>ProtectSecureBoot</key>
+		<false/>
+		<key>ProtectUefiServices</key>
+		<true/>
+		<key>ProvideCurrentCpuInfo</key>
+		<false/>
+		<key>ProvideCustomSlide</key>
+		<false/>
+		<key>ProvideMaxSlide</key>
+		<integer>0</integer>
+		<key>RebuildAppleMemoryMap</key>
+		<true/>
+		<key>ResizeAppleGpuBars</key>
+		<integer>-1</integer>
+		<key>SetupVirtualMap</key>
+		<true/>
+		<key>SignalAppleOS</key>
+		<false/>
+		<key>SyncRuntimePermissions</key>
+		<true/>
+		<key>ThirdPartyDrives</key>
+		<true/>
+		<key>TscSyncTimeout</key>
+		<integer>0</integer>
+		<key>XhciPortLimit</key>
+		<false/>
+	</dict>
 	<key>RtVariables</key>
 	<dict>
 		<key>CsrActiveConfig</key>
@@ -321,8 +379,6 @@
 		<string>0x28</string>
 		<key>ROM</key>
 		<data>ABbLESIz</data>
-		<key>HWTarget</key>
-		<string>j214k</string>
 	</dict>
 	<key>SMBIOS</key>
 	<dict>
@@ -337,75 +393,6 @@
 		<true/>
 		<key>InjectSystemID</key>
 		<true/>
-	</dict>
-	<key>Quirks</key>
-	<dict>
-		<key>AvoidRuntimeDefrag</key>
-		<true/>
-		<key>DevirtualiseMmio</key>
-		<false/>
-		<key>DisableSingleUser</key>
-		<false/>
-		<key>DisableVariableWrite</key>
-		<false/>
-		<key>DiscardHibernateMap</key>
-		<false/>
-		<key>EnableSafeModeSlide</key>
-		<false/>
-		<key>EnableWriteUnprotector</key>
-		<false/>
-		<key>ForceExitBootServices</key>
-		<false/>
-		<key>ForceOcWriteFlash</key>
-		<false/>
-		<key>MmioWhitelist</key>
-		<array/>
-		<key>ProtectMemoryRegions</key>
-		<false/>
-		<key>ProtectSecureBoot</key>
-		<false/>
-		<key>ProtectUefiServices</key>
-		<false/>
-		<key>ProvideCustomSlide</key>
-		<true/>
-		<key>ProvideMaxSlide</key>
-		<integer>0</integer>
-		<key>RebuildAppleMemoryMap</key>
-		<true/>
-		<key>ResizeAppleGpuBars</key>
-		<integer>-1</integer>
-		<key>SetupVirtualMap</key>
-		<true/>
-		<key>SignalAppleOS</key>
-		<false/>
-		<key>SyncRuntimePermissions</key>
-		<true/>
-		<key>FuzzyMatch</key>
-		<false/>
-		<key>KernelCache</key>
-		<string>Auto</string>
-		<key>AppleXcpmExtraMsrs</key>
-		<false/>
-		<key>AppleXcpmForceBoost</key>
-		<false/>
-		<key>DisableIoMapper</key>
-		<true/>
-		<key>DisableLinkeditJettison</key>
-		<true/>
-		<key>DummyPowerManagement</key>
-		<false/>
-		<key>ExtendBTFeatureFlags</key>
-		<false/>
-		<key>ExternalDiskIcons</key>
-		<false/>
-		<key>IncreasePciBarSize</key>
-		<false/>
-		<key>PowerTimeoutKernelPanic</key>
-		<true/>
-		<key>ThirdPartyDrives</key>
-		<true/>
-		<key>XhciPortLimit</key>
-		<false/>
 	</dict>
 </dict>
 </plist>

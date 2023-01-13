@@ -12,11 +12,16 @@ jobs:
     name: Build EFI Release
     runs-on: macos-latest
     env:
-      XCODE_VERSION: 12.4
+      XCODE_VERSION: 13.2.1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '5'
+
+      # Python 3.10 is not compatible with VoodooI2C cldoc
+      - uses: actions/setup-python@v4
+        with:
+            python-version: '3.9'
 
       - name: Initialize Variables
         run: |
@@ -34,14 +39,14 @@ jobs:
           ./makefile.sh --version=${CUR_TAG} --pre_release=Kext --pre_release=OC --model=CMLKBL
 
       - name: Upload to Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: XiaoMi NoteBook Pro EFI ${{ env.CUR_TAG }}
           path: build/*.zip
 
       - name: Upload to Release
         if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
-        uses: ncipollo/release-action@v1.8.10
+        uses: ncipollo/release-action@v1.10.0
         with:
           artifacts: build/*.zip
           bodyFile: build/XiaoMi_Pro-KBL-OC-${{ env.CUR_TAG }}/ReleaseNotes.md
@@ -54,7 +59,7 @@ jobs:
     name: Analyze Scripts
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Dependency
         run: |
@@ -69,7 +74,7 @@ jobs:
     name: Analyze DSLs
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Dependency
         run: |
@@ -84,7 +89,7 @@ jobs:
     name: Analyze OpenCore Configs
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Dependency
         run: |
@@ -92,8 +97,10 @@ jobs:
           hg="grep -m 1 RELEASE"
           hg_pre="grep -A 2 OpenCorePkg | grep -m 1 RELEASE"
           rawURL="https://github.com/acidanthera/OpenCorePkg/releases/latest"
+          rawURL=$(curl -Ls -o /dev/null -w "%{url_effective}" "${rawURL}" | sed 's/releases\/tag/releases\/expanded_assets/')
           rawURL_pre="https://github.com/dortania/build-repo/tags"
-          rawURL_pre="https://github.com$(curl -L --silent "${rawURL_pre}" | grep -m 1 'OpenCorePkg' | tr -d '"' | tr -d ' ' | tr -d '>' | sed -e 's/<ahref=//')"
+          rawURL_pre="https://github.com$(curl -L --silent "${rawURL_pre}" | grep -m 1 'OpenCorePkg' | sed -e 's/.*<a\ href="//' | cut -d "\"" -f1)"
+          rawURL_pre=$(curl -Ls -o /dev/null -w "%{url_effective}" "${rawURL_pre}" | sed 's/releases\/tag/releases\/expanded_assets/')
           url="https://github.com$(curl -L --silent "${rawURL}" | grep '/download/' | eval "${hg}" | sed 's/^[^"]*"\([^"]*\)".*/\1/')"
           url_pre="https://github.com$(curl -L --silent "${rawURL_pre}" | grep '/download/' | eval "${hg_pre}" | sed 's/^[^"]*"\([^"]*\)".*/\1/')"
           echo "Downloading OpenCorePkg"

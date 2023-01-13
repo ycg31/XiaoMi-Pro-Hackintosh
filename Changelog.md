@@ -2,8 +2,210 @@
 
 **English** | [中文](Docs/Changelog_CN.md)
 
+## XiaoMi NoteBook Pro EFI v1.7.5
+## 2023-02-07
+
+### Upgrade
+  - Update `OpenCore` v0.8.9
+  - Update `AppleALC` v1.7.9
+  - Update `HibernationFixup` v1.4.8
+  - Update `HfsPlus.efi` (up to [acidanthera/OcBinaryData@c2a9898](https://github.com/acidanthera/OcBinaryData/commit/c2a98980d30e39a571a2843ab26aa8d2b9188094))
+
+
+## [XiaoMi NoteBook Pro EFI v1.7.4](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.7.4)
+## 2023-01-03
+
+### Upgrade
+  - Update `OpenCore` v0.8.8
+  - Update `Lilu` v1.6.3
+  - Update `AppleALC` v1.7.8
+  - Update `WhateverGreen` v1.6.3
+  - Update `VoodooInput` v1.1.3
+  - Update `VoodooPS2` v2.3.3
+  - Update `VoodooI2C` v2.7.1
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@e0f745e](https://github.com/OpenIntelWireless/itlwm/commit/e0f745e75156854b7e0d18299a48f31db23ced10))
+
+### Add
+  - Add back `NVMeFix` to enable APST on SSDs
+
+### OC
+  - OC: CML: Change `HibernateMode` back to `Auto`
+
+### Clover
+  - Clover: CML: Enable `HibernationFixup`
+
+### Change
+  - config: Delete `reg-ltrovr` property as the tolerance latency's effect is unknown for hackintosh
+
+
+## [XiaoMi NoteBook Pro EFI v1.7.3](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.7.3)
+## 2022-12-06
+
+### Upgrade
+  - Update `OpenCore` v0.8.7
+  - Update `AppleALC` v1.7.7
+  - Update `WhateverGreen` v1.6.2
+  - Update `HibernationFixup` v1.4.7
+  - Update `VoodooPS2` v2.3.2
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@bb33666](https://github.com/OpenIntelWireless/itlwm/commit/bb33666a988f96b45724f3bca79ff07e20038bf2))
+  - Update `IntelBluetoothFirmware` v2.3.0 (up to [OpenIntelWireless/IntelBluetoothFirmware@693f2dc](https://github.com/OpenIntelWireless/IntelBluetoothFirmware/commit/693f2dcaefe218f7f0205957bfbe381cdf5354ae))
+
+### OC
+  - OC: Update config to support `OpenCore` v0.8.7
+
+### Change
+  - Add boot-args `ps2kbdonly=1` to disable `VoodooPS2` 's mouse clock line
+  - CML: Remove possibly faulty EDID injection; EDID customization is rarely required, and users should generate their own EDID
+
+
+## [XiaoMi NoteBook Pro EFI v1.7.2](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.7.2)
+## 2022-11-08
+
+### Upgrade
+  - Update `OpenCore` v0.8.6
+  - Update `Clover` r5150
+  - Update `AppleALC` v1.7.6
+  - Update `RestrictEvents` v1.0.9
+
+### OC
+  - OC: Update config to support `OpenCore` v0.8.6
+
+### Clover
+  - Update config
+
+
+## [XiaoMi NoteBook Pro EFI v1.7.1](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.7.1)
+## 2022-10-04
+
+### Upgrade
+  - Update `OpenCore` v0.8.5
+  - Update `BrcmPatchRAM` v2.6.4
+  - Update `VoodooPS2` v2.3.1 to fix CML model unresponsive keyboard at BootPicker after restart on Monterey+
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@ee56708](https://github.com/OpenIntelWireless/itlwm/commit/ee567086f288951766f4259f8239c472be66679f))
+
+### Clover
+  - Clover: Remove `ApfsDriverLoader.efi`, `AppleGenericInput.efi` & `AppleUiSupport.efi` from [AppleSupportPkg](https://github.com/acidanthera/AppleSupportPkg) and replace them with `ApfsDriverLoader.efi` and `AppleKeyFeeder.efi` embedded in [CloverBootloader](https://github.com/CloverHackyColor/CloverBootloader)
+  - Clover: Add missing `BlueToolFixup` to 13 kext folder
+
+
+## [XiaoMi NoteBook Pro EFI v1.7.0](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.7.0)
+## 2022-09-05
+
+### Upgrade
+  - Update `OpenCore` v0.8.4
+  - Update `Clover` r5149
+  - Update `AppleALC` v1.7.5
+  - Update `VoodooPS2` v2.3.0
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@bb86d9f](https://github.com/OpenIntelWireless/itlwm/commit/bb86d9f6b9388fbe725d3e42ca72fbf3b27dddc5))
+  - Update `IntelBluetoothFirmware` v2.3.0 (up to [OpenIntelWireless/IntelBluetoothFirmware@18fcde3](https://github.com/OpenIntelWireless/IntelBluetoothFirmware/commit/18fcde3519bcb00ad9b46286d604a73661cf52b1))
+
+### OC
+  - OC: Update config to support `OpenCore` v0.8.4
+
+
+## [XiaoMi NoteBook Pro EFI v1.6.9](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.9)
+## 2022-08-02
+
+### Upgrade
+  - Update `OpenCore` v0.8.3
+  - Update `Clover` r5148
+  - Update `Lilu` v1.6.2
+  - Update `AppleALC` v1.7.4
+  - Update `WhateverGreen` v1.6.1
+  - Update `VoodooPS2` v2.2.9 (up to [acidanthera/VoodooPS2@fdb8be5](https://github.com/acidanthera/VoodooPS2/commit/fdb8be58ac0b5c4c76b1bfe12f7c88b63fff1e10))
+  - Update `VoodooI2C` v2.7 (up to [VoodooI2C/VoodooI2C@9ab9831](https://github.com/VoodooI2C/VoodooI2C/commit/9ab98319b6411c4a4822cc12f840df85cc684bfc))
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@34441bc](https://github.com/OpenIntelWireless/itlwm/commit/34441bc68ad35b57d4299f5d28d9ff7879beed4f))
+  - Update `IntelBluetoothFirmware` v2.2.0 (up to [OpenIntelWireless/IntelBluetoothFirmware@bbdde1f](https://github.com/OpenIntelWireless/IntelBluetoothFirmware/commit/bbdde1f6ca5211824adf2a0e6540647b6ba656ce))
+
+### OC
+  - OC: Update config to support `OpenCore` v0.8.3
+
+
+## [XiaoMi NoteBook Pro EFI v1.6.8](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.8)
+## 2022-07-05
+
+### Upgrade
+  - Update `OpenCore` v0.8.2
+  - Update `Clover` r5147
+  - Update `Lilu` v1.6.1
+  - Update `VirtualSMC` v1.3.0
+  - Update `AppleALC` v1.7.3
+  - Update `WhateverGreen` v1.6.0
+  - Update `HibernationFixup` v1.4.6
+  - Update `RestrictEvents` v1.0.8
+  - Update `BrcmPatchRAM` v2.6.3
+  - Update `VoodooPS2` v2.2.9
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@6a804ef](https://github.com/OpenIntelWireless/itlwm/commit/6a804ef81215634a5ea3547782e8d3741042f9b1))
+  - Update `IntelBluetoothFirmware` v2.2.0 (up to [OpenIntelWireless/IntelBluetoothFirmware@a9aec13](https://github.com/OpenIntelWireless/IntelBluetoothFirmware/commit/a9aec134ca258f6367078b27f942c0223a368406))
+
+
+## [XiaoMi NoteBook Pro EFI v1.6.7](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.7)
+## 2022-06-13
+
+### Upgrade
+  - Update `OpenCore` v0.8.2 (up to [acidanthera/OpenCorePkg@e05a69d](https://github.com/acidanthera/OpenCorePkg/commit/e05a69da640009ac1983c7c8c78af4f0d9b4bc6f))to support macOS13.0 beta 1 (22A5266r)
+  - Update `Lilu` v1.6.1 (up to [acidanthera/Lilu@9775e8b](https://github.com/acidanthera/Lilu/commit/9775e8b8b3a05f7ed016fd9b587d43839f3c7cbf)) to support macOS13.0 beta 1 (22A5266r)
+  - Update `VirtualSMC` v1.3.0 (up to [acidanthera/VirtualSMC@a45e73b](https://github.com/acidanthera/VirtualSMC/commit/a45e73baa35b5a97a69bc95acb90561b51d2aa56)) to support macOS13.0 beta 1 (22A5266r)
+  - Update `AppleALC` v1.7.3 (up to [acidanthera/AppleALC@2992c19](https://github.com/acidanthera/AppleALC/commit/2992c19b71faa0a4fc98e0431b38057e415e55b0)) to support macOS13.0 beta 1 (22A5266r)
+  - Update `WhateverGreen` v1.6.0 (up to [acidanthera/WhateverGreen@ade6c98](https://github.com/acidanthera/WhateverGreen/commit/ade6c98fe12b62101e0a0c41f55dae43d0b78fae)) to support macOS13.0 beta 1 (22A5266r)
+  - Update `HibernationFixup` v1.4.6 (up to [acidanthera/HibernationFixup@a4a1d52](https://github.com/acidanthera/HibernationFixup/commit/a4a1d52eec6ca437ad6909818d090696302b0723)) to support macOS13.0 beta 1 (22A5266r)
+  - Update `RestrictEvents` v1.0.8 (up to [acidanthera/RestrictEvents@668c632](https://github.com/acidanthera/RestrictEvents/commit/668c632e152242f4e6b7db463eb597bc8b2715d3)) to support macOS13.0 beta 1 (22A5266r)
+  - Update `BrcmPatchRAM` v2.6.3 (up to [acidanthera/BrcmPatchRAM@8c04849](https://github.com/acidanthera/BrcmPatchRAM/commit/8c048492a19d24905d0b0be2f10cf26e1cc0c27f)) to support macOS13.0 beta 1 (22A5266r)
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@66cf933](https://github.com/OpenIntelWireless/itlwm/commit/66cf9336052c783f54d27c5f58b39708863b7da1)) to support macOS13.0 beta 1 (22A5266r)
+
+
+## [XiaoMi NoteBook Pro EFI v1.6.6](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.6)
+## 2022-06-06
+
+### Upgrade
+  - Update `OpenCore` v0.8.1
+  - Update `AppleALC` v1.7.2
+  - Update `WhateverGreen` v1.5.9
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@5261172](https://github.com/OpenIntelWireless/itlwm/commit/52611728e09f547dca575c1410280b98494fe3fa))
+  - Update `IntelBluetoothFirmware` v2.2.0 (up to [OpenIntelWireless/IntelBluetoothFirmware@76949ee](https://github.com/OpenIntelWireless/IntelBluetoothFirmware/commit/76949ee63cb55777670ead07310f74acd8701dbe))
+
+### Add
+  - Add `IntelBTPatcher` to fix Intel Bluetooth on Big Sur, Catalina, Mojave, High Sierra, etc
+
+### OC
+  - OC: Update config to support `OpenCore` v0.8.1
+  - OC: CML: Change `HibernateMode` to `None` to try to solve Not booting after running out of battery issue
+
+### Clover
+  - Clover: CML: Disable `HibernationFixup` to try to solve Not booting after running out of battery issue
+
+### Change
+  - ACPI: Modify `kUSBSleepPortCurrentLimit` and `kUSBWakePortCurrentLimit` in `SSDT-USB*` to 2100 based on [ACDT's SSDT-EC-USBX](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/AcpiSamples/Source/SSDT-EC-USBX.dsl)
+  - Disable `ProvideCustomSlide` based on OC debug log
+  - KBL: Enable MAT support by enabling `DevirtualiseMmio`, `ProtectUefiServices` & `RebuildAppleMemoryMap`; adding `MmioWhitelist` patch; and disabling `EnableWriteUnprotector`
+  - CML: Enable `ProtectUefiServices` as part of MAT support
+  - CML: Disable `HibernationFixup` to try to solve Not booting after running out of battery issue
+
+
+## [XiaoMi NoteBook Pro EFI v1.6.5](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.5)
+## 2022-04-18
+
+### Upgrade
+  - Update `OpenCore` v0.8.0
+  - Update `Clover` r5146
+  - Update `Lilu` v1.6.0
+  - Update `VirtualSMC` v1.2.9
+  - Update `AppleALC` v1.7.1
+  - Update `WhateverGreen` v1.5.8
+  - Update `RestrictEvents` v1.0.7
+  - Update `VoodooPS2` v2.2.8
+  - Update `VoodooI2C` v2.7
+  - Update `AirportItlwm` v2.2.0 (up to [OpenIntelWireless/itlwm@f9de654](https://github.com/OpenIntelWireless/itlwm/commit/f9de654a4468774a76006de8a05da0df6a71c9cd))
+  - Update `IntelBluetoothFirmware` v2.1.0 (up to [OpenIntelWireless/IntelBluetoothFirmware@aaf4247](https://github.com/OpenIntelWireless/IntelBluetoothFirmware/commit/aaf42472824865f553eeb7e17c7fa1c024da1305))
+
+### OC
+  - OC: Update config to support `OpenCore` v0.8.0
+  - OC: Change `SecureBootModel` back to `Disabled` to support more machines, but can not receive OEM update
+    - Go to `App Store` and search `Monterey (or newer macOS)` to receive update instead
+
+
 ## [XiaoMi NoteBook Pro EFI v1.6.4](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.4)
-## 12-6-2021
+## 2021-12-06
 
 ### Upgrade
   - Update `OpenCore` v0.7.6
@@ -22,7 +224,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.6.3](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.3)
-## 11-2-2021
+## 2021-11-02
 
 ### Upgrade
   - Update `OpenCore` v0.7.5
@@ -52,7 +254,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.6.2](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.2)
-## 10-6-2021
+## 2021-10-06
 
 ### Upgrade
   - Update `OpenCore` v0.7.4
@@ -79,7 +281,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.6.1](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.1)
-## 9-8-2021
+## 2021-09-08
 
 ### Upgrade
   - Update `VoodooI2C` v2.6.5 (up to [VoodooI2C/VoodooI2C@385c068](https://github.com/VoodooI2C/VoodooI2C/commit/385c0688e72817a58e22be35e4996cc1e88996c3))
@@ -89,7 +291,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.6.0](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.6.0)
-## 9-7-2021
+## 2021-09-07
 
 ### Upgrade
   - Update `OpenCore` v0.7.3
@@ -121,7 +323,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.9](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.9)
-## 8-4-2021
+## 2021-08-04
 
 ### Upgrade
   - Update `OpenCore` v0.7.2
@@ -143,7 +345,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.8](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.8)
-## 7-5-2021
+## 2021-07-05
 
 ### Upgrade
   - Update `OpenCore` v0.7.1
@@ -168,7 +370,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.7](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.7)
-## 6-16-2021
+## 2021-06-16
 
 ### Update
   - Update `OpenCore` v0.7.1 (up to [acidanthera/OpenCorePkg@ee0fb99](https://github.com/acidanthera/OpenCorePkg/commit/ee0fb99105a191c16926b8d6cd58ce2151eb7894))
@@ -190,7 +392,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.6](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.6)
-## 6-8-2021
+## 2021-06-08
 
 ### Update
   - Update `OpenCore` v0.7.0
@@ -214,7 +416,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.5](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.5)
-## 5-3-2021
+## 2021-05-03
 
 ### Update
   - Update `OpenCore` v0.6.9
@@ -232,7 +434,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.4](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.4)
-## 4-5-2021
+## 2021-04-05
 
 ### Update
   - Update `OpenCore` v0.6.8
@@ -250,7 +452,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.3](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.3)
-## 3-1-2021
+## 2021-03-01
 
 ### Update
   - Update `OpenCore` v0.6.7
@@ -277,7 +479,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.2](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.2)
-## 2-2-2021
+## 2021-02-02
 
 ### Update
   - Update `OpenCore` v0.6.6
@@ -298,7 +500,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.1](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.1)
-## 1-13-2021
+## 2021-01-13
 
 ### Remove
   - Remove `force-online*` properties to fix HDMI
@@ -308,7 +510,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.5.0](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.0)
-## 1-12-2021
+## 2021-01-12
 
 ### Update
   - Update `OpenCore` v0.6.5
@@ -334,7 +536,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.8](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.8)
-## 12-7-2020
+## 2020-12-07
 
 ### Update
   - Update `OpenCore` v0.6.4
@@ -364,7 +566,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.7](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.7)
-## 11-3-2020
+## 2020-11-03
 
 ### Remove
   - Remove `AAPL,slot-name` to support HEVC on macOS11
@@ -374,7 +576,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.6](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.6)
-## 11-2-2020
+## 2020-11-02
 
 ### Update
   - Update `OpenCore` v0.6.3
@@ -395,7 +597,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.5](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.5)
-## 10-5-2020
+## 2020-10-05
 
 ### Update
   - Update `OpenCore` v0.6.2
@@ -421,7 +623,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.4](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.4)
-## 9-8-2020
+## 2020-09-08
 
 ### Update
   - Update `Clover` r5122
@@ -446,7 +648,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.3](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.3)
-## 8-3-2020
+## 2020-08-03
 
 ### Update
   - Update `Clover` r5120
@@ -471,7 +673,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.2](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.2)
-## 7-16-2020
+## 2020-07-16
 
 ### Update
   - Update `OpenCore` v0.6.0 (up to [acidanthera/OpenCorePkg@20e60b0](https://github.com/acidanthera/OpenCorePkg/commit/20e60b0cbb273ea91a567440f0b7e230ecae3ec8))
@@ -489,7 +691,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.1](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.1)
-## 7-12-2020
+## 2020-07-12
 
 ### Update
   - Update `OpenCore` v0.6.0 (up to [acidanthera/OpenCorePkg@eee51ba](https://github.com/acidanthera/OpenCorePkg/commit/eee51bae932b5a366351e994ea2a1909c46c3ebf)) to support macOS11.0 beta 1 (20A4299v)
@@ -518,7 +720,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.1 beta 1](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.1-beta1)
-## 6-14-2020
+## 2020-06-14
 
 ### Update
   - Update `Clover` r5119
@@ -533,7 +735,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.4.0](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.0)
-## 6-1-2020
+## 2020-06-01
 
 ### Update
   - Update `Clover` r5118
@@ -559,7 +761,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.9](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.9)
-## 5-4-2020
+## 2020-05-04
 
 ### Update
   - Update `Clover` r5115
@@ -591,7 +793,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.8](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.8)
-## 4-10-2020
+## 2020-04-10
 
 ### Update
   - Update `Clover` r5109
@@ -624,7 +826,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.7](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.7)
-## 3-25-2020
+## 2020-03-25
 
 ### Update
   - Update `Clover` r5107 to support macOS10.15.4
@@ -643,7 +845,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.6](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.6)
-## 3-10-2020
+## 2020-03-10
 
 ### Update
   - Update `Clover` r5104
@@ -682,7 +884,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.5](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.5)
-## 7-17-2019
+## 2019-07-17
 
 ### Update
   - Update `Clover` r5018
@@ -702,7 +904,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.4](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.4)
-## 7-10-2019
+## 2019-07-10
 
   - Support macOS10.15
 
@@ -740,7 +942,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.3](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.3)
-## 4-16-2019
+## 2019-04-16
 
 ### Update
   - Update `Clover` r4920
@@ -754,7 +956,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.2](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.2)
-## 3-28-2019
+## 2019-03-28
 
 ### Update
   - Update `Clover` r4910
@@ -774,7 +976,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.1](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.1)
-## 3-1-2019
+## 2019-03-01
 
 ### Update
   - Update `Clover` r4892
@@ -789,7 +991,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.3.0](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.3.0)
-## 2-10-2019
+## 2019-02-10
 
 ### Update
   - Update `Clover` r4871
@@ -811,7 +1013,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.2.9](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.2.9)
-## 12-26-2018
+## 2018-12-26
 
 ### Update
   - Update `Clover` r4821
@@ -848,7 +1050,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.2.8](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.2.8)
-## 9-28-2018
+## 2018-09-28
 
 ### Downgrade
   - Downgrade [`Clover` r4658.RM-4903.ca9576f3](https://github.com/RehabMan/Clover) because Rehabman's version is more reliable
@@ -872,7 +1074,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.2.7](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.2.7)
-## 9-15-2018
+## 2018-09-15
 
 ### Update
   - Update `Clover` r4671
@@ -898,14 +1100,14 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.2.6](https://github.com/stevezhengshiqi/XiaoMi-Pro/releases/tag/1.2.6)
-## 8-13-2018
+## 2018-08-13
 
 ### Change
   - Reverse back `CPUFriendProvider.kext` to the one in v1.2.2 because the one in v1.2.5 will cause KP in some devices in 10.13.3~10.13.5. If you want better CPU performance or better battery life, please read [#53](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/issues/53)
 
 
 ## [XiaoMi NoteBook Pro EFI v1.2.5](https://github.com/stevezhengshiqi/XiaoMi-Pro/releases/tag/1.2.5)
-## 8-9-2018
+## 2018-08-09
 
   - Mojave installation becomes easier
 
@@ -924,7 +1126,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.2.4](https://github.com/stevezhengshiqi/XiaoMi-Pro/releases/tag/1.2.4)
-## 7-27-2018
+## 2018-07-27
 
 ### Update
   - Update `Clover` r4625
@@ -949,7 +1151,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.2.2](https://github.com/stevezhengshiqi/XiaoMi-Pro/releases/tag/1.2.2)
-## 5-14-2018
+## 2018-05-14
 
 ### Update
   - Update `Clover` r4458
@@ -970,7 +1172,7 @@
   - Edit `SSDT-PCIList.aml` to let System Information.app show correct information
 
 
-## 4-13-2018
+## 2018-04-13
 
 ### Update
   - Update `Clover` r4438
@@ -982,7 +1184,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.1.1](https://github.com/stevezhengshiqi/XiaoMi-Pro/releases/tag/1.1.1)
-## 4-8-2018
+## 2018-04-08
 
   - Support for 10.13.4 installation
 
@@ -1004,7 +1206,7 @@
 
 
 ## [XiaoMi NoteBook Pro EFI v1.0.0](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.0.0)
-## 1-25-2018
+## 2018-01-25
 
   - Support for 10.13.x installation
 
@@ -1020,14 +1222,14 @@
   - Fix screen brightness can not be saved
 
 
-## 11-7-2017
+## 2017-11-07
 
 ### Downgrade
   - Downgrade `Lilu` v1.2.0, because v1.2.1 is not stable at the moment and may fail to enter the system
   - Downgrade `AppleALC` v1.2.0
 
 
-## 11-5-2017
+## 2017-11-05
 
 ### Update
   - Update `apfs.efi` to version 10.13.1
@@ -1040,21 +1242,21 @@
   - Fix Drivers64UEFI to solve the problem that can not be installed
 
 
-## 11-2-2017
+## 2017-11-02
 
 ### Update
   - Update `Lilu` v1.2.0, support 10.13.2Beta
   - Update `AppleALC`, using the latest revision of Lilu co-compiler to solve 10.13.1 update can not be driven after the problem
 
 
-## 10-31-2017
+## 2017-10-31
 
   - Update sound card driver, fix earphone problem
   - New driver to add layout-id: 13
   - Support four nodes to support the headset to switch freely, Mic / LineIn is working properly
 
 
-## 10-19-2017
+## 2017-10-19
 
   - Graphics driver is normal
   - The touchpad turns on normally, multi-gestures are normal after waking up
@@ -1062,7 +1264,7 @@
   - Battery information is normal
 
 
-## 10-18-2017
+## 2017-10-18
 
   - Beta graphics driver is not as good as the first version; now the graphics driver is restored to fake 0x19160000
 
@@ -1074,7 +1276,7 @@
   - Fix Drivers
 
 
-## 10-17-2017
+## 2017-10-17
 
   - EFI update, fixed graphics driver
 
@@ -1091,6 +1293,6 @@
   - Fix `IntelGraphicsFixup` v1.2.0
 
 
-## 10-14-2017
+## 2017-10-14
 
   - EFI update, the trackpad is working

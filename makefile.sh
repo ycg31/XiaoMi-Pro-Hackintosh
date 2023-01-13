@@ -6,7 +6,7 @@
 # Build XiaoMi-Pro EFI release
 #
 # Reference:
-# https://github.com/williambj1/Hackintosh-EFI-Asus-Zephyrus-S-GX531/blob/master/Makefile.sh by @williambj1
+# https://github.com/williambj1/Hackintosh-EFI-Asus-Zephyrus-S-GX531/blob/master/Makefile.sh (Archived) by @williambj1
 
 
 # Vars
@@ -21,7 +21,7 @@ REPO_NAME_BRANCH="${REPO_NAME}-${REPO_BRANCH}"
 RETRY_MAX=5
 
 # Release Message
-RLMSG="**For people have trouble booting the system, reset NVRAM first and then try to set SecureBootModel = Disabled (OC).**"
+RLMSG="**EFI upgrade instructions are given [here](https://github.com/daliansky/XiaoMi-Pro-Hackintosh#upgrade).<br />To receive OEM updates, set SecureBootModel = Default (OC, risky) or go to App Store and search Ventura (or newer macOS).**"
 
 build_mode="Release"
 clean_up=true
@@ -137,16 +137,16 @@ OUTDir_CML_CLOVER="XiaoMi_Pro-CML-Clover-${version}"
 OUTDir_CML_OC="XiaoMi_Pro-CML-OC-${version}"
 
 # Kexts
-# Require Lilu to be the last for bKext()
+# Lilu is not in the list because of bKext()
 acdtKexts=(
   VirtualSMC
   WhateverGreen
   AppleALC
   HibernationFixup
   RestrictEvents
+  NVMeFix
   VoodooPS2
   BrcmPatchRAM
-  Lilu
 )
 
 frwfKexts=(
@@ -213,8 +213,6 @@ function init() {
 
   local dirs=(
     "Clover"
-    "Clover/AppleSupportPkg_209"
-    "Clover/AppleSupportPkg_216"
     "OpenCore"
   )
   for model in "${model_list[@]}"; do
@@ -250,9 +248,10 @@ function h_or_g() {
   elif [[ "$1" == "IntelBluetoothFirmware" ]]; then
     hgs=( "grep -m 1 IntelBluetooth" )
   elif [[ "$1" == "itlwm" ]]; then
-    hgs=( "grep -m 1 AirportItlwm-Big_Sur"
-          "grep -m 1 AirportItlwm-Catalina"
-          "grep -m 1 AirportItlwm-Monterey"
+    hgs=( "grep -m 1 BigSur"
+          "grep -m 1 Catalina"
+          "grep -m 1 Monterey"
+          "grep -m 1 Ventura"
         )
   elif [[ "$1" == "NoTouchID" ]]; then
     hgs=( "grep -m 1 RELEASE" )
@@ -270,31 +269,24 @@ function dGR() {
 
   if [[ -n ${3+x} ]]; then
     if [[ "$3" == "PreRelease" ]]; then
+    # FIXME: New GitHub lazy load makes it hard to extract pre-release, and I have not figured it out
       tag=""
     elif [[ "$3" == "NULL" ]]; then
       tag="/latest"
     else
-      if [[ -n ${GITHUB_ACTIONS+x} || ${gh_api} == false ]]; then
-        if [[ "$2" == "AppleSupportPkg_209" ]]; then
-          tag="/tag/2.0.9"
-        elif [[ "$2" == "AppleSupportPkg_216" ]]; then
-          tag="/tag/2.1.6"
-        fi
-      else
-        # only release_id is supported
-        tag="/$3"
-      fi
+      tag="/$3"
     fi
   else
     tag="/latest"
   fi
 
   if [[ -n ${GITHUB_ACTIONS+x} || ${gh_api} == false ]]; then
-    if [[ "$2" == "AppleSupportPkg_209" || "$2" == "AppleSupportPkg_216" ]]; then
-      rawURL="https://github.com/$1/AppleSupportPkg/releases$tag"
-    elif [[ "$2" == "build-repo" ]]; then
+    if [[ "$2" == "build-repo" ]]; then
       rawURL="https://github.com/$1/$2/tags"
-      rawURL="https://github.com$(curl -L --silent "${rawURL}" | grep -m 1 'OpenCorePkg' | tr -d '"' | tr -d ' ' | tr -d '>' | sed -e 's/<ahref=//')"
+      if [[ ${language} == "zh_CN" ]]; then
+        rawURL=${rawURL/#/${CFURL}/}
+      fi
+      rawURL="https://github.com$(curl -L --silent "${rawURL}" | grep -m 1 'OpenCorePkg' | sed -e 's/.*<a\ href="//' | cut -d "\"" -f1)"
     else
       rawURL="https://github.com/$1/$2/releases$tag"
     fi
@@ -302,17 +294,19 @@ function dGR() {
       if [[ ${language} == "zh_CN" ]]; then
         rawURL=${rawURL/#/${CFURL}/}
       fi
+      rawURL=$(curl -Ls -o /dev/null -w "%{url_effective}" "${rawURL}" | sed 's/releases\/tag/releases\/expanded_assets/')
       urls+=( "https://github.com$(curl -L --silent "${rawURL}" | grep '/download/' | eval "${hg}" | sed 's/^[^"]*"\([^"]*\)".*/\1/')" )
     done
   else
-    if [[ "$2" == "AppleSupportPkg_209" || "$2" == "AppleSupportPkg_216" ]]; then
-      rawURL="https://api.github.com/repos/$1/AppleSupportPkg/releases$tag"
-    elif [[ "$2" == "build-repo" ]]; then
+    if [[ "$2" == "build-repo" ]]; then
       rawURL="https://api.github.com/repos/$1/$2/releases"
     else
       rawURL="https://api.github.com/repos/$1/$2/releases$tag"
     fi
     for hg in "${hgs[@]}"; do
+      if [[ ${language} == "zh_CN" ]]; then
+        rawURL=${rawURL/#/${CFURL}/}
+      fi
       if [[ "$2" == "build-repo" ]]; then
         urls+=( "$(curl --silent "${rawURL}" | grep -A 100 'OpenCorePkg' | grep 'browser_download_url' | eval "${hg}" | tr -d '"' | tr -d ' ' | sed -e 's/browser_download_url://')" )
       else
@@ -409,9 +403,9 @@ function bKextHelper() {
   local lineNum
 
   if [[ "${model_input}" =~ "CML" ]]; then
-    liluPlugins="AppleALC BrcmPatchRAM HibernationFixup RealtekCardReaderFriend VirtualSMC WhateverGreen RestrictEvents NoTouchID"
+    liluPlugins="AppleALC BrcmPatchRAM HibernationFixup NVMeFix RealtekCardReaderFriend VirtualSMC WhateverGreen RestrictEvents NoTouchID"
   elif [[ "${model_input}" =~ "KBL" ]]; then
-    liluPlugins="AppleALC BrcmPatchRAM HibernationFixup RealtekCardReaderFriend VirtualSMC WhateverGreen RestrictEvents"
+    liluPlugins="AppleALC BrcmPatchRAM HibernationFixup NVMeFix RealtekCardReaderFriend VirtualSMC WhateverGreen RestrictEvents"
   fi
 
   echo "${green}[${reset}${blue}${bold} Building $2 ${reset}${green}]${reset}"
@@ -506,6 +500,8 @@ function bKextHelper() {
     cp -R "${PATH_LONG_BIG}"*.kext "../KBL" || copyErr
   elif [[ "$2" == "IntelBluetoothFirmware" ]]; then
     cp -R "../MacKernelSDK" "./" || copyErr
+    # IntelBTPatcher needs Lilu as dependency
+    cp -R "../Lilu.kext" "./" || copyErr
     mkdir -p "tmp" || exit 1
     cp -R IntelBluetoothFirmware/fw/ibt-12* "tmp" || copyErr
     cp -R IntelBluetoothFirmware/fw/ibt-19-0* "tmp" || copyErr
@@ -529,12 +525,10 @@ function bKextHelper() {
     fi
   elif [[ "$2" == "itlwm" ]]; then
     cp -R "../MacKernelSDK" "./" || copyErr
-    # Pass print syntax to support Python3
-    /usr/bin/sed -i "" "s:print compress(\"test\"):pass:g" "scripts/zlib_compress_fw.py"
-
     mkdir -p "tmp" || exit 1
     cp -R itlwm/firmware/iwlwifi-QuZ* "tmp" || copyErr
     cp -R itlwm/firmware/iwm-8265* "tmp" || copyErr
+
     if [[ "${model_input}" =~ "CML" ]]; then
       # Delete unrelated firmware and only keep iwlwifi-QuZ* for Intel Wireless 9462
       rm -rf "include/FwBinary.cpp" || exit 1
@@ -597,6 +591,8 @@ function bKext() {
     bKextHelper ${OIW} "${oiwKext}" "${build_mode}"
   done
   bKextHelper VoodooI2C VoodooI2C
+  # Make sure Lilu is later than Lilu based kexts
+  bKextHelper ${ACDT} "Lilu" "${build_mode}"
   echo "${yellow}[${bold} WARNING ${reset}${yellow}]${reset}: Please clean Xcode cache in ~/Library/Developer/Xcode/DerivedData!"
   echo "${yellow}[${bold} WARNING ${reset}${yellow}]${reset}: Some kexts only work on current macOS SDK build!"
   echo
@@ -608,8 +604,6 @@ function download() {
 
   # OpenCore
   if [[ "${pre_release}" =~ "OC" ]]; then
-    # williambj1's OpenCore-Factory repository has been archived
-    # dGR williambj1 OpenCore-Factory PreRelease "OpenCore"
     dGR dortania build-repo NULL "OpenCore" "skip" || dGR ${ACDT} OpenCorePkg NULL "OpenCore"
   else
     dGR ${ACDT} OpenCorePkg NULL "OpenCore"
@@ -623,12 +617,13 @@ function download() {
   else
     for acdtKext in "${acdtKexts[@]}"; do
       dGR ${ACDT} "${acdtKext}"
+      dGR ${ACDT} "Lilu"
     done
     # for frwfKext in "${frwfKexts[@]}"; do
     #   dGR ${FRWF} "${frwfKext}"
     # done
     for oiwKext in "${oiwKexts[@]}"; do
-      dGR ${OIW} "${oiwKext}" PreRelease
+      dGR ${OIW} "${oiwKext}"
     done
     if [[ "${model_input}" =~ "CML" ]]; then
       dGR al3xtjames NoTouchID NULL "CML"
@@ -638,12 +633,6 @@ function download() {
     fi
     dGR VoodooI2C VoodooI2C
   fi
-
-  # UEFI drivers
-  # AppleSupportPkg v2.0.9
-  dGR ${ACDT} AppleSupportPkg_209 19214108 "Clover/AppleSupportPkg_209"
-  # AppleSupportPkg v2.1.6
-  dGR ${ACDT} AppleSupportPkg_216 24123335 "Clover/AppleSupportPkg_216"
 
   # UEFI
   # dPB ${ACDT} OcBinaryData Drivers/HfsPlus.efi
@@ -672,11 +661,6 @@ function unpack() {
   fi
   if [[ "${model_input}" =~ "KBL" ]] && [[ "${pre_release}" != *Kext* ]]; then
     (cd "KBL" && unzip -qq ./*.zip || exit 1)
-  fi
-  # Move IntelBluetooth*.kext to parent folder when download from GitHub Release
-  if [[ "${pre_release}" != *"Kext"* ]]; then
-    cp -R IntelBluetoothFirmware*/IntelBluetoothFirmware.kext "./" || copyErr
-    cp -R IntelBluetoothFirmware*/IntelBluetoothInjector.kext "./" || copyErr
   fi
   echo
 }
@@ -714,11 +698,13 @@ function patch() {
       mv "${model}/Big Sur/AirportItlwm.kext" "${model}/Big Sur/AirportItlwm_Big_Sur.kext" || exit 1
       mv "${model}/Catalina/AirportItlwm.kext" "${model}/Catalina/AirportItlwm_Catalina.kext" || exit 1
       mv "${model}/Monterey/AirportItlwm.kext" "${model}/Monterey/AirportItlwm_Monterey.kext" || exit 1
+      mv "${model}/Ventura/AirportItlwm.kext" "${model}/Ventura/AirportItlwm_Ventura.kext" || exit 1
     done
   else
     mv "Big Sur/AirportItlwm.kext" "Big Sur/AirportItlwm_Big_Sur.kext" || exit 1
     mv "Catalina/AirportItlwm.kext" "Catalina/AirportItlwm_Catalina.kext" || exit 1
     mv "Monterey/AirportItlwm.kext" "Monterey/AirportItlwm_Monterey.kext" || exit 1
+    mv "Ventura/AirportItlwm.kext" "Ventura/AirportItlwm_Ventura.kext" || exit 1
   fi
   echo
 }
@@ -733,6 +719,7 @@ function install() {
     "Kexts/SMCProcessor.kext"
     "Kexts/VirtualSMC.kext"
     "Lilu.kext"
+    "NVMeFix.kext"
     # "RealtekCardReader.kext"
     # "RealtekCardReaderFriend.kext"
     "Release/NullEthernet.kext"
@@ -746,6 +733,7 @@ function install() {
     local cmlKextItems=(
       "AppleALC.kext"
       "IntelBluetoothFirmware.kext"
+      "IntelBTPatcher.kext"
     )
     if [[ "${pre_release}" =~ "Kext" ]]; then
       cmlKextItems=("${cmlKextItems[@]/#/CML/}")
@@ -757,6 +745,7 @@ function install() {
       "Big Sur/AirportItlwm_Big_Sur.kext"
       "Catalina/AirportItlwm_Catalina.kext"
       "Monterey/AirportItlwm_Monterey.kext"
+      "Ventura/AirportItlwm_Ventura.kext"
     )
     if [[ "${pre_release}" =~ "Kext" ]]; then
       cmlWifiKextItems=("${cmlWifiKextItems[@]/#/CML/}")
@@ -765,6 +754,7 @@ function install() {
       "10.15"
       "11"
       "12"
+      "13"
     )
     local cmlCloverIbtInjctrDirs=(
       "10.15"
@@ -775,6 +765,7 @@ function install() {
     local kblKextItems=(
       "AppleALC.kext"
       "IntelBluetoothFirmware.kext"
+      "IntelBTPatcher.kext"
     )
     if [[ "${pre_release}" =~ "Kext" ]]; then
       kblKextItems=("${kblKextItems[@]/#/KBL/}")
@@ -787,6 +778,7 @@ function install() {
       "Big Sur/AirportItlwm_Big_Sur.kext"
       "Catalina/AirportItlwm_Catalina.kext"
       "Monterey/AirportItlwm_Monterey.kext"
+      "Ventura/AirportItlwm_Ventura.kext"
     )
     if [[ "${pre_release}" =~ "Kext" ]]; then
       kblWifiKextItems=("${kblWifiKextItems[@]/#/KBL/}")
@@ -795,6 +787,7 @@ function install() {
       "10.15"
       "11"
       "12"
+      "13"
     )
     local kblCloverIbtInjctrDirs=(
       "10.15"
@@ -825,6 +818,7 @@ function install() {
     done
 
     if [[ "${model}" == "CML" ]]; then
+      # CML: NoTouchID.kext
       for noTouchIDDir in "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/10.15" "${!OUTDir_MODEL_OC}/EFI/OC/Kexts/"; do
         cp -R "CML/NoTouchID.kext" "${noTouchIDDir}" || copyErr
       done
@@ -835,10 +829,12 @@ function install() {
       cp -R "${model}/Big Sur/AirportItlwm_Big_Sur.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/11" || copyErr
       cp -R "${model}/Catalina/AirportItlwm_Catalina.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/10.15" || copyErr
       cp -R "${model}/Monterey/AirportItlwm_Monterey.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/12" || copyErr
+      cp -R "${model}/Ventura/AirportItlwm_Ventura.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/13" || copyErr
     else
       cp -R "Big Sur/AirportItlwm_Big_Sur.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/11" || copyErr
       cp -R "Catalina/AirportItlwm_Catalina.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/10.15" || copyErr
       cp -R "Monterey/AirportItlwm_Monterey.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/12" || copyErr
+      cp -R "Ventura/AirportItlwm_Ventura.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/13" || copyErr
     fi
 
     kextItems="${model_wifiKextItems}[@]"
@@ -856,6 +852,7 @@ function install() {
       fi
     done
     cp -R "BlueToolFixup.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/12" || copyErr
+    cp -R "BlueToolFixup.kext" "${!OUTDir_MODEL_CLOVER}/EFI/CLOVER/kexts/13" || copyErr
 
     if [[ "${pre_release}" =~ "Kext" ]]; then
       cp -R "${model}/IntelBluetoothInjector.kext" "${!OUTDir_MODEL_OC}/EFI/OC/Kexts/" || copyErr
@@ -895,6 +892,7 @@ function install() {
     "${REPO_NAME_BRANCH}/ACPI/Shared/SSDT-HPET.aml"
     "${REPO_NAME_BRANCH}/ACPI/Shared/SSDT-MCHC.aml"
     "${REPO_NAME_BRANCH}/ACPI/Shared/SSDT-PNLF.aml"
+    "${REPO_NAME_BRANCH}/ACPI/Shared/SSDT-PS2K.aml"
     "${REPO_NAME_BRANCH}/ACPI/Shared/SSDT-RMNE.aml"
   )
   if [[ "${model_input}" =~ "KBL" ]]; then
@@ -903,7 +901,6 @@ function install() {
       "${REPO_NAME_BRANCH}/ACPI/KBL/SSDT-LGPA.aml"
       "${REPO_NAME_BRANCH}/ACPI/KBL/SSDT-MEM2.aml"
       "${REPO_NAME_BRANCH}/ACPI/KBL/SSDT-PMC.aml"
-      "${REPO_NAME_BRANCH}/ACPI/KBL/SSDT-PS2K.aml"
       "${REPO_NAME_BRANCH}/ACPI/KBL/SSDT-TPD0.aml"
       "${REPO_NAME_BRANCH}/ACPI/KBL/SSDT-USB.aml"
       "${REPO_NAME_BRANCH}/ACPI/KBL/SSDT-XCPM.aml"
@@ -918,7 +915,6 @@ function install() {
       "${REPO_NAME_BRANCH}/ACPI/CML/SSDT-DDGPU.aml"
       "${REPO_NAME_BRANCH}/ACPI/CML/SSDT-LGPA.aml"
       "${REPO_NAME_BRANCH}/ACPI/CML/SSDT-PMC.aml"
-      "${REPO_NAME_BRANCH}/ACPI/CML/SSDT-PS2K.aml"
       "${REPO_NAME_BRANCH}/ACPI/CML/SSDT-TPD0.aml"
       "${REPO_NAME_BRANCH}/ACPI/CML/SSDT-USB.aml"
       "${REPO_NAME_BRANCH}/ACPI/CML/SSDT-XCPM.aml"
@@ -1106,6 +1102,16 @@ function install() {
         cp "${wikiItem}" "${wikiDir}" || copyErr
       done
     done
+
+    if [[ "${model}" == "CML" ]]; then
+      for cmlDir in "${!OUTDir_MODEL_CLOVER}/Docs" "${!OUTDir_MODEL_OC}/Docs"; do
+        if [[ ${remote} == false ]]; then
+          cp "../Docs/README_CML.txt" "${cmlDir}" || copyErr
+        else
+          cp "${REPO_NAME_BRANCH}/Docs/README_CML.txt" "${cmlDir}" || copyErr
+        fi
+      done
+    fi
   done
   echo
 
@@ -1158,17 +1164,15 @@ function install() {
 # Extract files for Clover
 function extractClover() {
   local driverItems=(
+    "Clover/CloverV2/EFI/CLOVER/drivers/off/UEFI/FileSystem/ApfsDriverLoader.efi"
     "Clover/CloverV2/EFI/CLOVER/drivers/off/UEFI/MemoryFix/OpenRuntime.efi"
-    "Clover/AppleSupportPkg_209/Drivers/AppleGenericInput.efi"
-    "Clover/AppleSupportPkg_209/Drivers/AppleUiSupport.efi"
-    "Clover/AppleSupportPkg_216/Drivers/ApfsDriverLoader.efi"
+    "Clover/CloverV2/EFI/CLOVER/drivers/off/UEFI/FileVault2/AppleKeyFeeder.efi"
+    "Clover/CloverV2/EFI/CLOVER/drivers/off/UEFI/FileVault2/HashServiceFix.efi"
   )
 
   echo "${green}[${reset}${blue}${bold} Extracting Clover ${reset}${green}]${reset}"
   # From CloverV2, AppleSupportPkg v2.0.9, and AppleSupportPkg v2.1.6
   unzip -qq -d "Clover" "Clover/*.zip" || exit 1
-  unzip -qq -d "Clover/AppleSupportPkg_209" "Clover/AppleSupportPkg_209/*.zip" || exit 1
-  unzip -qq -d "Clover/AppleSupportPkg_216" "Clover/AppleSupportPkg_216/*.zip" || exit 1
   for model in "${model_list[@]}"; do
     OUTDir_MODEL_CLOVER="OUTDir_${model}_CLOVER"
     cp -R "Clover/CloverV2/EFI/BOOT" "${!OUTDir_MODEL_CLOVER}/EFI/" || copyErr
@@ -1187,6 +1191,8 @@ function extractOC() {
     "OpenCore/X64/EFI/OC/Drivers/AudioDxe.efi"
     "OpenCore/X64/EFI/OC/Drivers/OpenCanopy.efi"
     "OpenCore/X64/EFI/OC/Drivers/OpenRuntime.efi"
+    "OpenCore/X64/EFI/OC/Drivers/ResetNvramEntry.efi"
+    "OpenCore/X64/EFI/OC/Drivers/ToggleSipEntry.efi"
   )
   local toolItems=(
     "OpenCore/X64/EFI/OC/Tools/OpenShell.efi"
@@ -1236,10 +1242,10 @@ function genNote() {
     echo "${RLMSG}" >> ReleaseNotes.md
   fi
 
-  lineStart=$(grep -n "XiaoMi NoteBook Pro EFI v" ${changelogPath}) && lineStart=${lineStart%%:*} && lineStart=$((lineStart+1))
-  lineEnd=$(grep -n -m2 "XiaoMi NoteBook Pro EFI v" ${changelogPath} | tail -n1)
+  lineStart=$(grep -n "XiaoMi NoteBook Pro EFI v" "${changelogPath}") && lineStart=${lineStart%%:*} && lineStart=$((lineStart+1))
+  lineEnd=$(grep -n -m2 "XiaoMi NoteBook Pro EFI v" "${changelogPath}" | tail -n1)
   lineEnd=${lineEnd%%:*} && lineEnd=$((lineEnd-3))
-  sed -n "${lineStart},${lineEnd}p" ${changelogPath} >> ReleaseNotes.md
+  sed -n "${lineStart},${lineEnd}p" "${changelogPath}" >> ReleaseNotes.md
 
   # Generate Cloudflare links when using GitHub Action to publish EFI release
   if [[ ${publish_efi} == true ]]; then

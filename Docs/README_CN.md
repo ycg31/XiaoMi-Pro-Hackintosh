@@ -50,7 +50,7 @@
 | 硬盘 | 英特尔 SSD 660P 系列 |
 | 集成显卡 | 英特尔 超高清显卡 620 |
 | 显示器 | LQ156M1JW01 SHP14C3 1920x1080 344x194mm 15.5-inch |
-| 声卡 | 瑞昱 ALC256 (节点: 69/99) |
+| 声卡 | 瑞昱 ALC256 (节点: 69/~~99~~) |
 | 无线网卡 | 英特尔 Wireless-AC 9462 |
 | 触控板 | ELAN2303 |
 | SD 读卡器 | 瑞昱 RTS5129 |
@@ -58,6 +58,8 @@
 
 ## 目前情况
 
+- **休眠** 可能会在 CML 机型上引发严重引导问题，见 [#661](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/issues/661) 和 [#694](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/issues/694)
+  - 用户需要运行 `sudo pmset -a hibernatemode 0` 来禁用休眠模式，同时请看 [README_CML](Docs/README_CML.txt)
 - **HDMI** 开机后第一次接上时可能无法工作
   - 你需要重新插拔或者关上盖子等五秒后打开盖子
 - **有线网 在 macOS10.15+ 上可能无法工作，见 [#256](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/issues/256)**
@@ -70,6 +72,7 @@
 - **英特尔蓝牙** 不支持部分蓝牙设备
   - 在 macOS12 上，英特尔蓝牙支持更多蓝牙4.x设备
   - 阅读 [蓝牙解决方案](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/wiki/蓝牙解决方案)
+  - 你也可以尝试 [AppleBluetooth](https://github.com/AppleBluetooth) 发布的 [IOBluetoothFixup](https://github.com/AppleBluetooth/IOBluetoothFixup)，[IntelBluetoothFamily](https://github.com/AppleBluetooth/IntelBluetoothFamily) 和 [OpenFirmwareManager](https://github.com/AppleBluetooth/OpenFirmwareManager)，请阅读 [IntelBluetoothFamily Usage](https://github.com/AppleBluetooth/IntelBluetoothFamily#usage)
 - **英特尔无线网卡** 性能不佳
   - 推荐使用 macOS Big Sur 或更高版本；macOS 版本低于11的话需要重建缓存重启如果英特尔无线网卡不工作
   - 购买 USB网卡 或者支持的内置网卡
@@ -80,7 +83,7 @@
 - 其他都工作正常
 
 ### Clover
-- TM1701 和 TM1707：支持 macOS10.13 ~ macOS12
+- TM1701 和 TM1707：支持 macOS10.15 ~ macOS12
   - **[v1.5.9](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.9) 是最后一个支持 macOS High Sierra & Mojave 的 EFI 版本**
 - TM1905 和 TM1963：支持 macOS10.15 ~ macOS12
 -----
@@ -88,18 +91,17 @@
 - 使用 OpenCore 后需要清理 NVRAM
   - 在 OpenCore 启动界面按下 `空格`，选中进入 `Reset NVRAM`
   - 然后重启并使用 Clover
-- r5127 不支持低于 macOS Big Sur 版本上的英特尔 Wi-Fi 因 ForceKextsToLoad 功能尚未实现（仅 v1.4.7 支持旧 macOS 版本的英特尔 Wi-Fi，或者添加 `IO80211Family.kext` 到 kext 文件夹）
+- r5127 不支持低于 macOS Big Sur 版本上的英特尔 Wi-Fi 因 ForceKextsToLoad 功能尚未实现（仅 [v1.4.7](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.4.7) 支持旧 macOS 版本的英特尔 Wi-Fi，或者添加 `IO80211Family.kext` 到 kext 文件夹）
 
 ### OpenCore
-- TM1701 和 TM1707：支持 macOS10.13 ~ macOS12
+- TM1701 和 TM1707：支持 macOS10.15 ~ macOS13
   - **[v1.5.9](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases/tag/v1.5.9) 是最后一个支持 macOS High Sierra & Mojave 的 EFI 版本**
-- TM1905 和 TM1963：支持 macOS10.15 ~ macOS12
+- TM1905 和 TM1963：支持 macOS10.15 ~ macOS13
 -----
-- **Windows 的软件会丢失激活，因为 OpenCore 注入了不同的硬件 UUID**
-  - 根据 [OpenCore官方文档](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf)，你可以尝试把原生固件UUID注入进 `/OC/config.plist` 的 `PlatformInfo - Generic - SystemUUID`
 - 使用 Clover 后需要清理 NVRAM
   - 在 OpenCore 启动界面按下 `空格`，选中进入 `Reset NVRAM`
 - 有限的主题
+- 有些人升级 Windows 11 遇到了问题，见 [#665](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/issues/665)
 - **推荐阅读：[Security and FileVault | OpenCore Post-Install](https://dortania.github.io/OpenCore-Post-Install/universal/security.html) 和 [OpenCore Configuration](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf)**，特别注意 **UEFI Secure Boot** 章节
 
 
@@ -115,10 +117,9 @@
 ### 首次安装
 
 - 请参考详细的安装教程 [【老司机引路】小米笔记本pro Win10+黑苹果macOS 10.13.6双系统](http://www.miui.com/thread-11363672-1-1.html)，视频教程 [小米笔记本Pro(win10+Mojave10.14.3)双系统过程以及一些问题解答](http://www.bilibili.com/video/av42261432?share_medium=android&share_source=copy_link&bbid=bVk_DmoLaV48Wj4Pcw9zinfoc&ts=1555066114848)。
-- 如果安装过程中触控板失效，请在安装前插上有线鼠标或者无线鼠标发射器。安装完成后打开 `终端.app` 并运行 `sudo kextcache -i /`，等待进程结束重启即可使用触控板。
 - 完整的EFI附件请访问 [releases](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases) 页面。
  - 如果是日常使用，请不要克隆或者下载 main 分支。
- 
+
  <img src="img/README_donot_Clone_or_Download.jpg" width="300px" alt="donot_clone_or_download">
  <img src="img/README_get_Release.jpg" width="300px" alt="get_release">
  
@@ -161,7 +162,8 @@ cd XiaoMi-Pro-Hackintosh
 - 如果你的机子是 小米笔记本Pro **10代** CPU，记为 **CML**（Comet Lake）机器。
 -----
 - 在 [release page](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases) 里下载最新 EFI release，或从 [action page](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/actions) 的 Artifacts 里下载最新测试版 EFI release。
-- 完整替换 `BOOT` 和 `CLOVER`(或 `OC`)文件夹。首先删除他们，然后从 [release 包里](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases)拷贝新的。
+- 挂载 EFI 分区，首先运行命令 `sudo diskutil list` 来找到 EFI 分区所在的分区标号，然后运行命令 `sudo diskutil mount diskXsX`（X 是你的 EFI 分区标号）
+- 完整替换 `BOOT` 和 `OC`(或 `CLOVER`)文件夹。首先删除他们，然后从 [release 包里](https://github.com/daliansky/XiaoMi-Pro-Hackintosh/releases)拷贝新的。
 
 
 ## 改善体验
@@ -174,7 +176,7 @@ cd XiaoMi-Pro-Hackintosh
 - 添加 `forceRenderStandby=0` 到 `config - NVRAM - Add - 7CXXX - boot-args` (OpenCore) 或 `config - Boot - Arguments` (Clover) 如果出现 NVMe Kernel Panic CSTS=0xffffffff
 - 使用 [NVMeFix](https://github.com/acidanthera/NVMeFix) 来开启 NVMe SSDs 的 APST
 - TM1701 和 TM1707：使用 [ALCPlugFix](../ALCPlugFix) 来修复耳机重新插拔后无声
-- TM1701：使用 [DVMT_and_0xE2_fix](../BIOS/TM1701/DVMT_and_0xE2_fix) 来把动态显存设为64mb并解锁 CFG
+- TM1701：使用 [DVMT_and_0xE2_fix](../BIOS/TM1701/DVMT_and_0xE2_fix) 来开启 4K 外接显示屏并获得更加“原生”的电源管理
 
 
 ## 常见问题解答
@@ -190,8 +192,11 @@ cd XiaoMi-Pro-Hackintosh
 #### 卡在白苹果图标或者无法启动。
 
 建议重置 NVRAM。如果是 Clover 用户，在 Clover 开机界面按下 `Fn+F11`。  
-如果是 OC 用户，在 OpenCore 开机界面按下 `空格` 键并选择 `Reset NVRAM`。如果仍不奏效，可以尝试打开 `config.plist`，并把 `SecureBootModel` 设置为 `Disabled`。  
-如果是 Clover 用户，尝试删除 `config.plist` 里的 `HWTarget`。
+如果是 OC 用户，在 OpenCore 开机界面按下 `空格` 键并选择 `Reset NVRAM`。如果仍不奏效，可以尝试打开 `config.plist`，并把 `SecureBootModel` 设置为 `Disabled`。
+
+#### 收不到 OEM 系统更新。
+
+如果是 OC 用户，在 macOS11+，`SecureBootModel` 需要设置为 `Default` 来获取系统偏好设置中的 OEM 系统更新。然而，当 `SecureBootModel = Default` 时，一些机器无法启动。这种情况下，前往 `App Store` 并搜索 `Monterey（或者更新系统）`。
 
 #### 我的设备被 `查找我的Mac` 锁住了，无法开机，怎么办？
 
@@ -207,6 +212,10 @@ cd XiaoMi-Pro-Hackintosh
 首先，在macOS系统里打开 `系统偏好设置 - 启动磁盘`，选择要直接进入的系统。  
 然后，打开 `/EFI/OC/config.plist`，关闭 `ShowPicker`。  
 想切换系统的时候，开机时按 `Esc` 键来进入引导菜单。
+
+#### [OC] 怎么取消 OpenCore 默认启动项？
+
+打开 `config.plist` 并修改 `LauncherOption` 值，原本为 `Full`，改成 `System`。
 
 #### [OC] 怎么开启启动音？（TM1701 & TM1707）
 

@@ -77,9 +77,10 @@ function h_or_g() {
   elif [[ "$1" == "IntelBluetoothFirmware" ]]; then
     hgs=( "grep -m 1 IntelBluetooth" )
   elif [[ "$1" == "itlwm" ]]; then
-    hgs=( "grep -m 1 AirportItlwm-Big_Sur"
-          "grep -m 1 AirportItlwm-Catalina"
-          "grep -m 1 AirportItlwm-Monterey"
+    hgs=( "grep -m 1 BigSur"
+          "grep -m 1 Catalina"
+          "grep -m 1 Monterey"
+          "grep -m 1 Ventura"
         )
   elif [[ "$1" == "NoTouchID" ]]; then
     hgs=( "grep -m 1 RELEASE" )
@@ -97,6 +98,7 @@ function dGR() {
 
   if [[ -n ${3+x} ]]; then
     if [[ "$3" == "PreRelease" ]]; then
+    # FIXME: New GitHub lazy load makes it hard to extract pre-release, and I have not figured it out
       tag=""
     elif [[ "$3" == "NULL" ]]; then
       tag="/latest"
@@ -114,11 +116,15 @@ function dGR() {
       if [[ ${systemLanguage} == "zh_CN" ]]; then
         rawURL=${rawURL/#/${CFURL}/}
       fi
+      rawURL=$(curl -Ls -o /dev/null -w "%{url_effective}" "${rawURL}" | sed 's/releases\/tag/releases\/expanded_assets/')
       urls+=( "https://github.com$(curl -L --silent "${rawURL}" | grep '/download/' | eval "${hg}" | sed 's/^[^"]*"\([^"]*\)".*/\1/')" )
     done
   else
     rawURL="https://api.github.com/repos/$1/$2/releases$tag"
     for hg in "${hgs[@]}"; do
+      if [[ ${systemLanguage} == "zh_CN" ]]; then
+        rawURL=${rawURL/#/${CFURL}/}
+      fi
       urls+=( "$(curl --silent "${rawURL}" | grep 'browser_download_url' | eval "${hg}" | tr -d '"' | tr -d ' ' | sed -e 's/browser_download_url://')" )
     done
   fi
@@ -191,6 +197,7 @@ function download() {
     AppleALC
     HibernationFixup
     RestrictEvents
+    NVMeFix
     VoodooPS2
     BrcmPatchRAM
     Lilu
@@ -217,7 +224,7 @@ function download() {
 # done
 
   for oiwKext in "${oiwKexts[@]}"; do
-    dGR ${OIW} "${oiwKext}" PreRelease "${OUTDir_TMP}"
+    dGR ${OIW} "${oiwKext}" NULL "${OUTDir_TMP}"
   done
 
   dGR Sniki EAPD-Codec-Commander NULL "${OUTDir_TMP}"
@@ -261,6 +268,7 @@ function patch() {
   mv "${OUTDir_TMP}/Big Sur/AirportItlwm.kext" "${OUTDir_TMP}/Big Sur/AirportItlwm_Big_Sur.kext" || exit 1
   mv "${OUTDir_TMP}/Catalina/AirportItlwm.kext" "${OUTDir_TMP}/Catalina/AirportItlwm_Catalina.kext" || exit 1
   mv "${OUTDir_TMP}/Monterey/AirportItlwm.kext" "${OUTDir_TMP}/Monterey/AirportItlwm_Monterey.kext" || exit 1
+  mv "${OUTDir_TMP}/Ventura/AirportItlwm.kext" "${OUTDir_TMP}/Ventura/AirportItlwm_Ventura.kext" || exit 1
 }
 
 # Install
@@ -272,11 +280,13 @@ function install() {
     "HibernationFixup.kext"
     "IntelBluetoothFirmware.kext"
     "IntelBluetoothInjector.kext"
+    "IntelBTPatcher.kext"
     "Kexts/SMCBatteryManager.kext"
     "Kexts/SMCLightSensor.kext"
     "Kexts/SMCProcessor.kext"
     "Kexts/VirtualSMC.kext"
     "Lilu.kext"
+    "NVMeFix.kext"
     "NoTouchID.kext"
   # "RealtekCardReader.kext"
   # "RealtekCardReaderFriend.kext"
@@ -289,6 +299,7 @@ function install() {
     "Big Sur/AirportItlwm_Big_Sur.kext"
     "Catalina/AirportItlwm_Catalina.kext"
     "Monterey/AirportItlwm_Monterey.kext"
+    "Ventura/AirportItlwm_Ventura.kext"
   )
 
   for kextItem in "${kextItems[@]}"; do
